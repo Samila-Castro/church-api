@@ -30,7 +30,7 @@ app.get("/health-check", (req,res)=> {
   }
 });
 
-app.post("/events", (req, res)=>{
+app.post("/events", (req, res)=> {
   const { name, date, location, description} = req.body;
 
   if((!name || !date || location === "")){
@@ -48,10 +48,7 @@ app.post("/events", (req, res)=>{
     events.push(newEvent);
     return res.status(200).send(newEvent);
   }
-
   return res.status(400).send({text: "O formato precisa ser UTC"});
-  
 });
-
 
 app.listen(3000, () => console.log("Server running on port 3000"));
