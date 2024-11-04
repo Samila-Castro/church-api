@@ -7,12 +7,13 @@ app.use(express.json());
 const events =[];
 
 function isValidUTCDate(dateString){
-  const date = new Date(dateString);
-   if(date.toISOString() === dateString){
-    return true;
-   }
+  const regexDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
 
+  if(!regexDate.test(dateString)){
   return false;
+  }
+
+  return true;
 }
 
 app.get("/health-check", (req,res)=> {
