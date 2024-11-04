@@ -26,8 +26,10 @@ app.get("/health-check", (req,res)=> {
   try{
     res.send(healthCheck);
   } catch(error){
-    healthCheck.message= error
-    res.status(500).send()
+      console.error("Error sending health check:", error);
+      res.status(500).send({
+        message: "Erro ao processar a verificação de saúde. Tente novamete mais tarde."
+      });
   }
 });
 
