@@ -10,7 +10,7 @@ function isValidUTCDate(dateString){
   const regexDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
 
   if(!regexDate.test(dateString)){
-  return false;
+    return false;
   }
 
   return true;
@@ -34,14 +34,15 @@ app.get("/health-check", (req,res)=> {
 });
 
 app.post("/events", (req, res)=> {
-  const { name, date, location, description} = req.body;
+  const { id, name, date, location, description} = req.body;
 
-  if((!name || !date || location === "")){
-    return res.status(400).send({text: "Os campos name, date e location são obrigatórios"});
+  if((!id || !name || !date || location === "")){
+    return res.status(400).send({text: "Os campos id, name, date e location são obrigatórios"});
   }
  
   if(isValidUTCDate(date)){
     const newEvent = {
+      id: id,
       name: name,
       date: date,
       location: location,
@@ -53,6 +54,7 @@ app.post("/events", (req, res)=> {
   }
   return res.status(400).send({text: "O formato precisa ser UTC"});
 });
+
 app.get("/events", (req, res) => {
   let filtered = events;
 
@@ -84,5 +86,6 @@ app.get("/events/:id", (req, res) => {
     })
   }
   return res.status(200).send(filteredEventsByid);
+})
 
 app.listen(3000, () => console.log("Server running on port 3000"));
