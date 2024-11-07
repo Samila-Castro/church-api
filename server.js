@@ -75,5 +75,14 @@ app.get("/events", (req, res) => {
   return res.status(200).send(filtered);
 });
 
+app.get("/events/:id", (req, res) => {
+  const filteredEventsByid = events.filter( event => event.id == req.params.id);
+    
+  if(!filteredEventsByid.length){
+    return res.status(404).send({
+      message: "Não foi encontrado nenhum evento com o id fornecido!"
+    })
+  }
+  return res.status(200).send(filteredEventsByid);
 
 app.listen(3000, () => console.log("Server running on port 3000"));
