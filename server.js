@@ -53,5 +53,27 @@ app.post("/events", (req, res)=> {
   }
   return res.status(400).send({text: "O formato precisa ser UTC"});
 });
+app.get("/events", (req, res) => {
+  let filtered = events;
+
+  if(req.query.name){
+    filtered = events.filter( (event) => event.name === req.query.name);
+  }
+
+  if(req.query.date){
+    if(isValidUTCDate(req.query.date)){
+      filtered = filtered.filter((event) => event.date === req.query.date);
+    }
+
+    return res.status(400).send({
+      messge: "A data aplicada ao filtro deve ser no formato UTC"
+    })
+
+  }
+
+  filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+  return res.status(200).send(filtered);
+});
+
 
 app.listen(3000, () => console.log("Server running on port 3000"));
