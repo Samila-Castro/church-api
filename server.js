@@ -63,14 +63,12 @@ app.get("/events", (req, res) => {
   }
 
   if(req.query.date){
-    if(isValidUTCDate(req.query.date)){
-      filtered = filtered.filter((event) => event.date === req.query.date);
-    }
-
+    if(!isValidUTCDate(req.query.date)){
     return res.status(400).send({
       messge: "A data aplicada ao filtro deve ser no formato UTC"
     })
-
+    }
+    filtered = filtered.filter((event) => event.date === req.query.date);
   }
 
   filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
