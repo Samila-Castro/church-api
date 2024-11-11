@@ -78,9 +78,9 @@ app.get("/events", (req, res) => {
 });
 
 app.get("/events/:id", (req, res) => {
-  const filteredEventsByid = events.filter( event => event.id == req.params.id);
+  const filteredEventsByid = events.find( event => event.id == req.params.id);
     
-  if(!filteredEventsByid.length){
+  if(!filteredEventsByid){
     return res.status(404).send({
       message: "Não foi encontrado nenhum evento com o id fornecido!"
     })
