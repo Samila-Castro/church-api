@@ -1,5 +1,6 @@
 import express from "express";
 import process  from "os";
+import { v4 as uuidv4} from "uuid";
 
 const app = express();
 app.use(express.json());
@@ -34,15 +35,15 @@ app.get("/health-check", (req,res)=> {
 });
 
 app.post("/events", (req, res)=> {
-  const { id, name, date, location, description} = req.body;
+  const {name, date, location, description} = req.body;
 
-  if((!id || !name || !date || location === "")){
+  if((!name || !date || location === "")){
     return res.status(400).send({text: "Os campos id, name, date e location são obrigatórios"});
   }
  
   if(isValidUTCDate(date)){
     const newEvent = {
-      id: id,
+      id: uuidv4(),
       name: name,
       date: date,
       location: location,
