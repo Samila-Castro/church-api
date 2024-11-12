@@ -65,9 +65,9 @@ app.get("/events", (req, res) => {
 
   if(req.query.date){
     if(!isValidUTCDate(req.query.date)){
-    return res.status(400).send({
-      messge: "A data aplicada ao filtro deve ser no formato UTC"
-    })
+      return res.status(400).send({
+        messge: "A data aplicada ao filtro deve ser no formato UTC"
+      })
     }
     filtered = filtered.filter((event) => event.date === req.query.date);
   }
@@ -85,6 +85,36 @@ app.get("/events/:id", (req, res) => {
     })
   }
   return res.status(200).send(filteredEventsByid);
+})
+
+app.put("/events/:id", (req, res)=> {
+  const { id } = req.params;
+
+  const { name, date, location, description } = req.body;
+
+  const eventFoundIndex = events.findIndex(event => event.id == id);
+
+  if(eventFoundIndex == -1){
+    return res.status(404).send({
+      message: "Não existe nenhum evento com o ID informado"
+    })
+  }
+
+  if(!isValidUTCDate(date)){
+    return res.status(400).send({
+      message: "O formato da data deve ser em UTC"
+    })
+  }
+
+  const updatedEvent = {
+    name: name || events[eventFoundIndex].name,
+    date: date || events[eventFoundIndex].date,
+    location: location || events[eventFoundIndex].location,
+    description: description || events[eventFoundIndex].description,
+  }
+
+  events[eventFoundIndex] = {id, ...updatedEvent};
+  return res.status(200).json(events[eventFoundIndex]);
 })
 
 app.listen(3000, () => console.log("Server running on port 3000"));
