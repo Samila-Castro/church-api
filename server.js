@@ -87,4 +87,19 @@ app.get("/events/:id", (req, res) => {
   return res.status(200).send(filteredEventsByid);
 })
 
+app.delete("/events/:id", (req, res) =>{
+  const { id } = req.params;
+
+  const foundEventIndex = events.findIndex(event => event.id == id);
+
+  if(foundEventIndex == -1){
+    return res.status(404).send({
+      message: "Não foi encontrado nenhum evento com o id fornecido!"
+    }) 
+  }
+
+  events.splice(foundEventIndex,1);
+  return res.status(204).end();
+})
+
 app.listen(3000, () => console.log("Server running on port 3000"));
